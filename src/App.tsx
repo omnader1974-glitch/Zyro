@@ -158,11 +158,33 @@ function StoreMainContent() {
               <div key={i} className="aspect-[3/4] bg-neutral-100 rounded-xl animate-pulse" />
             ))}
           </div>
+        ) : products.length === 0 ? (
+          <div className="py-24 text-center space-y-4 max-w-md mx-auto">
+            <Sparkles className="w-12 h-12 stroke-1 mx-auto text-amber-500 animate-pulse" />
+            <h3 className="text-2xl font-bold font-serif text-neutral-900">
+              {language === 'ar' ? 'المتجر فارغ ونظيف حالياً' : 'Store is Clean & Ready'}
+            </h3>
+            <p className="text-xs text-neutral-500 leading-relaxed">
+              {language === 'ar'
+                ? 'تم إزالة جميع المنتجات والتصنيفات التلقائية. يمكنك إضافة منتجات وتصنيفات جديدة مباشرة من لوحة التحكم.'
+                : 'All automatic demo products and categories have been removed. Add your real products and categories from the Admin Dashboard to see them live in real-time.'}
+            </p>
+            <button
+              onClick={handleAdminTrigger}
+              className="px-6 py-3 bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-black transition-all shadow-md"
+            >
+              {language === 'ar' ? 'فتح لوحة التحكم (Admin)' : 'Open Admin Dashboard'}
+            </button>
+          </div>
         ) : filteredProducts.length === 0 ? (
           <div className="py-20 text-center space-y-4 max-w-md mx-auto">
             <Filter className="w-12 h-12 stroke-1 mx-auto text-neutral-300" />
-            <h3 className="text-xl font-bold font-serif text-neutral-800">No products match your criteria.</h3>
-            <p className="text-xs text-neutral-500">Try clearing filters or searching for another keyword.</p>
+            <h3 className="text-xl font-bold font-serif text-neutral-800">
+              {language === 'ar' ? 'لا توجد منتجات تطابق البحث' : 'No products match your criteria.'}
+            </h3>
+            <p className="text-xs text-neutral-500">
+              {language === 'ar' ? 'جرّب إعادة ضبط الفلاتر أو البحث عن كلمة أخرى.' : 'Try clearing filters or searching for another keyword.'}
+            </p>
             <button
               onClick={() => {
                 setSelectedCategory('all');
@@ -170,7 +192,7 @@ function StoreMainContent() {
               }}
               className="px-6 py-2.5 bg-neutral-900 text-white text-xs font-bold uppercase rounded-lg hover:bg-black"
             >
-              Reset All Filters
+              {language === 'ar' ? 'إعادة ضبط الفلاتر' : 'Reset All Filters'}
             </button>
           </div>
         ) : (

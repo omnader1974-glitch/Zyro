@@ -164,21 +164,21 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     localStorage.setItem('zyro_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Seed initial data if Firestore collections are empty
+  // Seed initial data if Firestore collections are empty (for clean store, products and categories remain empty)
   const seedInitialDataIfNeeded = async () => {
     try {
-      const categoriesSnap = await getDocs(collection(db, 'categories'));
-      if (categoriesSnap.empty) {
-        for (const cat of INITIAL_CATEGORIES) {
-          await addDoc(collection(db, 'categories'), cat);
+      const cleanStoreSnap = await getDocs(collection(db, 'system_clean_store_v2'));
+      if (cleanStoreSnap.empty) {
+        // Clear all existing demo products and categories from Firestore
+        const productsSnap = await getDocs(collection(db, 'products'));
+        for (const d of productsSnap.docs) {
+          await deleteDoc(d.ref);
         }
-      }
-
-      const productsSnap = await getDocs(collection(db, 'products'));
-      if (productsSnap.empty) {
-        for (const prod of INITIAL_PRODUCTS) {
-          await addDoc(collection(db, 'products'), prod);
+        const categoriesSnap = await getDocs(collection(db, 'categories'));
+        for (const d of categoriesSnap.docs) {
+          await deleteDoc(d.ref);
         }
+        await addDoc(collection(db, 'system_clean_store_v2'), { cleanedAt: Date.now() });
       }
 
       const shippingSnap = await getDocs(collection(db, 'shipping'));
