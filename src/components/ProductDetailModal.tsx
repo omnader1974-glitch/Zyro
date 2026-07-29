@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Product } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { useStore } from '../context/StoreContext';
-import { X, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Check } from 'lucide-react';
+import { X, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Check, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ProductDetailModalProps {
@@ -46,23 +46,34 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden my-8"
           >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-20 p-2 text-neutral-500 hover:text-black hover:bg-neutral-100 rounded-full transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* Modal Top Header Bar with Back Button & Close Button */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-neutral-50/80">
+              <button
+                onClick={onClose}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 rounded-lg text-xs font-bold transition-all shadow-2xs border border-neutral-200 group cursor-pointer"
+              >
+                <ArrowLeft className={`w-4 h-4 transition-transform group-hover:-translate-x-0.5 ${language === 'ar' ? 'rotate-180 group-hover:translate-x-0.5' : ''}`} />
+                <span>{language === 'ar' ? 'العودة' : 'Back'}</span>
+              </button>
+
+              <button
+                onClick={onClose}
+                className="p-1.5 text-neutral-400 hover:text-black hover:bg-neutral-200/60 rounded-full transition-colors cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2">
               
-              {/* Left: Gallery */}
+              {/* Left: Gallery (1:1 Square Layout) */}
               <div className="p-6 bg-neutral-50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-neutral-200">
-                <div className="w-full aspect-[4/5] rounded-xl overflow-hidden bg-white shadow-xs mb-4">
+                <div className="w-full aspect-square rounded-xl overflow-hidden bg-white shadow-xs mb-4 flex items-center justify-center p-4 border border-neutral-100">
                   <img
                     src={activeImage}
                     alt={title}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-contain object-center"
                   />
                 </div>
 
@@ -73,11 +84,11 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                       <button
                         key={idx}
                         onClick={() => setSelectedImage(img)}
-                        className={`w-16 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                          activeImage === img ? 'border-neutral-900 scale-105' : 'border-transparent opacity-70 hover:opacity-100'
+                        className={`w-14 h-14 aspect-square rounded-lg overflow-hidden border-2 p-1 bg-white transition-all ${
+                          activeImage === img ? 'border-neutral-900 scale-105 shadow-xs' : 'border-neutral-200 opacity-70 hover:opacity-100'
                         }`}
                       >
-                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <img src={img} alt="" className="w-full h-full object-contain" />
                       </button>
                     ))}
                   </div>

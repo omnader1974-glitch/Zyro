@@ -45,12 +45,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onSelectProduct(product)}
     >
-      {/* Image Wrapper */}
-      <div className="relative aspect-[3/4] w-full bg-neutral-100 overflow-hidden">
+      {/* Image Wrapper (1:1 Square, object-contain) */}
+      <div className="relative aspect-square w-full bg-neutral-50 overflow-hidden flex items-center justify-center p-3">
         <img
           src={isHovered ? secondImage : product.images[0]}
           alt={title}
-          className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="w-full h-full object-contain object-center transform group-hover:scale-105 transition-transform duration-500 ease-out"
           loading="lazy"
         />
 
