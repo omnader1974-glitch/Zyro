@@ -227,45 +227,48 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const list: Category[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Category));
       list.sort((a, b) => (a.order || 0) - (b.order || 0));
       setCategories(list);
-    });
+    }, (err) => console.error('Error reading categories snapshot:', err));
 
     const unsubProducts = onSnapshot(collection(db, 'products'), (snapshot) => {
       const list: Product[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Product));
       setProducts(list);
+      setIsLoading(false);
+    }, (err) => {
+      console.error('Error reading products snapshot:', err);
       setIsLoading(false);
     });
 
     const unsubCoupons = onSnapshot(collection(db, 'coupons'), (snapshot) => {
       const list: Coupon[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Coupon));
       setCoupons(list);
-    });
+    }, (err) => console.error('Error reading coupons snapshot:', err));
 
     const unsubShipping = onSnapshot(collection(db, 'shipping'), (snapshot) => {
       const list: ShippingZone[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as ShippingZone));
       setShippingZones(list);
-    });
+    }, (err) => console.error('Error reading shipping snapshot:', err));
 
     const unsubSettings = onSnapshot(doc(db, 'settings', 'global'), (snapshot) => {
       if (snapshot.exists()) {
         setSettings(snapshot.data() as Settings);
       }
-    });
+    }, (err) => console.error('Error reading settings snapshot:', err));
 
     const unsubOrders = onSnapshot(query(collection(db, 'orders'), orderBy('createdAt', 'desc')), (snapshot) => {
       const list: Order[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Order));
       setOrders(list);
-    });
+    }, (err) => console.error('Error reading orders snapshot:', err));
 
     const unsubBanners = onSnapshot(collection(db, 'banners'), (snapshot) => {
       const list: Banner[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Banner));
       list.sort((a, b) => (a.order || 0) - (b.order || 0));
       setBanners(list);
-    });
+    }, (err) => console.error('Error reading banners snapshot:', err));
 
     const unsubReels = onSnapshot(collection(db, 'reels'), (snapshot) => {
       const list: Reel[] = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Reel));
       setReels(list);
-    });
+    }, (err) => console.error('Error reading reels snapshot:', err));
 
     return () => {
       unsubCategories();
