@@ -3,6 +3,7 @@ import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
+import { HeroVideo } from './components/HeroVideo';
 import { BannerCarousel } from './components/BannerCarousel';
 import { ReelsCarousel } from './components/ReelsCarousel';
 import { ProductCard } from './components/ProductCard';
@@ -102,7 +103,10 @@ function StoreMainContent() {
         onOpenTracking={() => setIsTrackingOpen(true)}
       />
 
-      {/* Hero Banner Carousel */}
+      {/* Homepage Background Hero Video */}
+      <HeroVideo />
+
+      {/* Hero Banner Carousel (if banners are added from admin) */}
       <BannerCarousel position="hero" />
 
       {/* Primary Catalog Container */}
