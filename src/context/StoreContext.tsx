@@ -164,58 +164,25 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     localStorage.setItem('zyro_wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Seed initial data if Firestore collections are empty (for clean store, products and categories remain empty)
+  // Ensure all demo data is completely cleaned from Firestore for a fresh start
   const seedInitialDataIfNeeded = async () => {
     try {
-      const cleanStoreSnap = await getDocs(collection(db, 'system_clean_store_v2'));
+      const cleanStoreSnap = await getDocs(collection(db, 'system_clean_store_v3'));
       if (cleanStoreSnap.empty) {
-        // Clear all existing demo products and categories from Firestore
-        const productsSnap = await getDocs(collection(db, 'products'));
-        for (const d of productsSnap.docs) {
-          await deleteDoc(d.ref);
+        // Wipes all demo collections in Firestore
+        const collectionsToWipe = ['products', 'categories', 'shipping', 'coupons', 'banners', 'reels'];
+        for (const colName of collectionsToWipe) {
+          const snap = await getDocs(collection(db, colName));
+          for (const d of snap.docs) {
+            await deleteDoc(d.ref);
+          }
         }
-        const categoriesSnap = await getDocs(collection(db, 'categories'));
-        for (const d of categoriesSnap.docs) {
-          await deleteDoc(d.ref);
-        }
-        await addDoc(collection(db, 'system_clean_store_v2'), { cleanedAt: Date.now() });
-      }
-
-      const shippingSnap = await getDocs(collection(db, 'shipping'));
-      if (shippingSnap.empty) {
-        for (const ship of INITIAL_SHIPPING) {
-          await addDoc(collection(db, 'shipping'), ship);
-        }
-      }
-
-      const couponsSnap = await getDocs(collection(db, 'coupons'));
-      if (couponsSnap.empty) {
-        for (const c of INITIAL_COUPONS) {
-          await addDoc(collection(db, 'coupons'), c);
-        }
-      }
-
-      const bannersSnap = await getDocs(collection(db, 'banners'));
-      if (bannersSnap.empty) {
-        for (const b of INITIAL_BANNERS) {
-          await addDoc(collection(db, 'banners'), b);
-        }
-      }
-
-      const reelsSnap = await getDocs(collection(db, 'reels'));
-      if (reelsSnap.empty) {
-        for (const r of INITIAL_REELS) {
-          await addDoc(collection(db, 'reels'), r);
-        }
-      }
-
-      const settingsDoc = doc(db, 'settings', 'global');
-      const settingsSnap = await getDocs(collection(db, 'settings'));
-      if (settingsSnap.empty) {
-        await setDoc(settingsDoc, INITIAL_SETTINGS);
+        // Reset settings to clean default
+        await setDoc(doc(db, 'settings', 'global'), INITIAL_SETTINGS);
+        await addDoc(collection(db, 'system_clean_store_v3'), { cleanedAt: Date.now() });
       }
     } catch (e) {
-      console.error('Error seeding initial data to Firestore:', e);
+      console.error('Error cleaning initial data from Firestore:', e);
     }
   };
 
