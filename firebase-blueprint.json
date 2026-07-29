@@ -1,0 +1,185 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "E-commerce product entity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "descriptionEn": { "type": "string" },
+        "descriptionAr": { "type": "string" },
+        "category": { "type": "string" },
+        "images": { "type": "array" },
+        "colors": { "type": "array" },
+        "sizes": { "type": "array" },
+        "originalPrice": { "type": "number" },
+        "discountedPrice": { "type": "number" },
+        "stock": { "type": "number" },
+        "sku": { "type": "string" },
+        "badge": { "type": "string" },
+        "isNew": { "type": "boolean" },
+        "isSale": { "type": "boolean" },
+        "isBestSeller": { "type": "boolean" },
+        "isFeatured": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["nameEn", "nameAr", "originalPrice", "category"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "slug": { "type": "string" },
+        "image": { "type": "string" },
+        "order": { "type": "number" },
+        "visible": { "type": "boolean" }
+      },
+      "required": ["nameEn", "nameAr", "slug"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Discount coupon code",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string" },
+        "type": { "type": "string" },
+        "value": { "type": "number" },
+        "expirationDate": { "type": "string" },
+        "usageLimit": { "type": "number" },
+        "usedCount": { "type": "number" },
+        "enabled": { "type": "boolean" }
+      },
+      "required": ["code", "type", "value"]
+    },
+    "ShippingZone": {
+      "title": "ShippingZone",
+      "description": "Governorate or region shipping rate",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "country": { "type": "string" },
+        "governorateEn": { "type": "string" },
+        "governorateAr": { "type": "string" },
+        "cost": { "type": "number" },
+        "enabled": { "type": "boolean" }
+      },
+      "required": ["country", "governorateEn", "governorateAr", "cost"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global website configuration",
+      "type": "object",
+      "properties": {
+        "announcementEn": { "type": "string" },
+        "announcementAr": { "type": "string" },
+        "announcementEnabled": { "type": "boolean" },
+        "freeShippingThreshold": { "type": "number" },
+        "facebookUrl": { "type": "string" },
+        "instagramUrl": { "type": "string" },
+        "tiktokUrl": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "youtubeUrl": { "type": "string" },
+        "twitterUrl": { "type": "string" }
+      }
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderNumber": { "type": "string" },
+        "customerName": { "type": "string" },
+        "primaryPhone": { "type": "string" },
+        "secondaryPhone": { "type": "string" },
+        "country": { "type": "string" },
+        "governorate": { "type": "string" },
+        "address": { "type": "string" },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "shippingCost": { "type": "number" },
+        "discount": { "type": "number" },
+        "couponCode": { "type": "string" },
+        "total": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["customerName", "primaryPhone", "country", "governorate", "address", "items", "total"]
+    },
+    "Banner": {
+      "title": "Banner",
+      "description": "Promotional banner slide",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "titleEn": { "type": "string" },
+        "titleAr": { "type": "string" },
+        "subtitleEn": { "type": "string" },
+        "subtitleAr": { "type": "string" },
+        "link": { "type": "string" },
+        "position": { "type": "string" },
+        "order": { "type": "number" },
+        "enabled": { "type": "boolean" }
+      },
+      "required": ["imageUrl", "position"]
+    },
+    "Reel": {
+      "title": "Reel",
+      "description": "Video reel highlight",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "thumbnail": { "type": "string" },
+        "titleEn": { "type": "string" },
+        "titleAr": { "type": "string" },
+        "productId": { "type": "string" },
+        "enabled": { "type": "boolean" }
+      },
+      "required": ["videoUrl"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Products collection"
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Categories collection"
+    },
+    "/coupons/{couponId}": {
+      "schema": { "$ref": "#/entities/Coupon" },
+      "description": "Discount codes"
+    },
+    "/shipping/{shippingId}": {
+      "schema": { "$ref": "#/entities/ShippingZone" },
+      "description": "Shipping rates"
+    },
+    "/settings/{settingsId}": {
+      "schema": { "$ref": "#/entities/Settings" },
+      "description": "Site global configuration"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer purchase orders"
+    },
+    "/banners/{bannerId}": {
+      "schema": { "$ref": "#/entities/Banner" },
+      "description": "Banners carousel"
+    },
+    "/reels/{reelId}": {
+      "schema": { "$ref": "#/entities/Reel" },
+      "description": "Short video reels"
+    }
+  }
+}
