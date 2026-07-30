@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Product } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { useStore } from '../context/StoreContext';
-import { X, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Check, ArrowLeft } from 'lucide-react';
+import { X, Heart, ShoppingBag, ShieldCheck, Truck, RotateCcw, Check, ArrowLeft, Ruler } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ProductDetailModalProps {
@@ -19,6 +19,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
+  const [showSizeChart, setShowSizeChart] = useState(false);
 
   const activeImage = selectedImage || (product?.images?.[0] || '');
   const activeColor = selectedColor || (product?.colors?.[0]?.nameEn || '');
@@ -176,12 +177,24 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                     </div>
                   )}
 
-                  {/* Size Selector */}
-                  {product.sizes && product.sizes.length > 0 && (
+                  {/* Size Selector & Size Chart */}
+                  {product.sizes && product.sizes.length > 0 ? (
                     <div className="mt-4">
-                      <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
-                        {t('product.selectSize')}
-                      </label>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
+                          {t('product.selectSize')}
+                        </label>
+                        {product.sizeChartUrl && (
+                          <button
+                            type="button"
+                            onClick={() => setShowSizeChart(true)}
+                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-amber-200/80 shadow-2xs"
+                          >
+                            <Ruler className="w-3.5 h-3.5 text-amber-600" />
+                            <span>{language === 'ar' ? 'دليل المقاسات' : 'Size Chart'}</span>
+                          </button>
+                        )}
+                      </div>
                       <div className="flex flex-wrap gap-1.5">
                         {product.sizes.map((s, i) => {
                           const isSelected = activeSize === s;
@@ -201,7 +214,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                         })}
                       </div>
                     </div>
-                  )}
+                  ) : product.sizeChartUrl ? (
+                    <div className="mt-4">
+                      <button
+                        type="button"
+                        onClick={() => setShowSizeChart(true)}
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg text-xs font-bold transition-colors cursor-pointer border border-amber-200 shadow-2xs"
+                      >
+                        <Ruler className="w-4 h-4 text-amber-600" />
+                        <span>{language === 'ar' ? 'عرض جدول المقاسات' : 'View Size Chart'}</span>
+                      </button>
+                    </div>
+                  ) : null}
 
                   {/* Quantity */}
                   <div className="mt-4 flex items-center gap-3">
@@ -280,6 +304,41 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                   </div>
                 </div>
               </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Size Chart Image Lightbox Modal */}
+      {showSizeChart && product && product.sizeChartUrl && (
+        <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="relative max-w-2xl w-full bg-white rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-col items-center max-h-[85vh] border border-neutral-200"
+          >
+            <div className="w-full flex items-center justify-between pb-3 mb-3 border-b border-neutral-200">
+              <div className="flex items-center gap-2">
+                <Ruler className="w-5 h-5 text-amber-600" />
+                <h3 className="font-bold text-neutral-900 text-sm sm:text-base">
+                  {language === 'ar' ? 'جدول المقاسات' : 'Size Chart'} — {title}
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowSizeChart(false)}
+                className="p-1.5 text-neutral-500 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer"
+                aria-label="Close size chart"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="w-full flex-1 overflow-auto flex items-center justify-center bg-neutral-50 rounded-xl p-3 border border-neutral-100">
+              <img
+                src={product.sizeChartUrl}
+                alt={language === 'ar' ? 'دليل المقاسات' : 'Size Chart'}
+                className="max-h-[65vh] w-auto object-contain rounded-lg shadow-xs"
+              />
             </div>
           </motion.div>
         </div>

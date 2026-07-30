@@ -22,6 +22,7 @@ export interface Product {
   discountedPrice?: number;
   stock: number;
   sku: string;
+  sizeChartUrl?: string;
   badge?: 'New' | 'Sale' | 'Best Seller' | 'Featured' | string;
   isNew?: boolean;
   isSale?: boolean;

@@ -1205,6 +1205,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                   </div>
                 </div>
 
+                {/* 9. Size Chart Image URL (Optional) */}
+                <div className="bg-neutral-950 p-5 rounded-xl border border-neutral-800 space-y-3">
+                  <label className="text-sm font-bold text-white flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-amber-500 text-black text-[11px] font-bold flex items-center justify-center font-mono">9</span>
+                    Size Chart Image URL (Optional)
+                  </label>
+                  <div>
+                    <input
+                      type="url"
+                      placeholder="https://example.com/size-chart.jpg"
+                      value={editingProduct.sizeChartUrl || ''}
+                      onChange={e => setEditingProduct({ ...editingProduct, sizeChartUrl: e.target.value })}
+                      className="w-full bg-neutral-900 border border-neutral-700 p-2.5 rounded-lg text-xs text-white"
+                    />
+                    <p className="text-[10px] text-neutral-500 mt-1">
+                      Paste a direct image URL for the size chart. If provided, a Size Chart section will be displayed on the product page.
+                    </p>
+                  </div>
+                </div>
+
                 {/* Additional Inventory & Status */}
                 <div className="bg-neutral-950 p-5 rounded-xl border border-neutral-800 space-y-3">
                   <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">
@@ -1279,6 +1299,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
                             ? editingProduct.images[c.imageIndex] 
                             : c.imageUrl
                         })),
+                        sizeChartUrl: editingProduct.sizeChartUrl ? editingProduct.sizeChartUrl.trim() : '',
                         stock: editingProduct.stock ?? 20,
                         sku: editingProduct.sku || `ZYRO-${Math.floor(Math.random() * 9000)}`,
                         badge: editingProduct.badge || 'New',
