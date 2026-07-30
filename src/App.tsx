@@ -205,6 +205,7 @@ function StoreMainContent() {
               <ProductCard
                 key={product.id}
                 product={product}
+                isSelected={selectedProduct?.id === product.id}
                 onSelectProduct={(p) => setSelectedProduct(p)}
               />
             ))}

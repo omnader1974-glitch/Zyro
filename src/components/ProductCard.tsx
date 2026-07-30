@@ -8,9 +8,10 @@ import { motion } from 'motion/react';
 interface ProductCardProps {
   product: Product;
   onSelectProduct: (product: Product) => void;
+  isSelected?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProduct }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProduct, isSelected = false }) => {
   const { language, t } = useLanguage();
   const { wishlist, toggleWishlist, addToCart } = useStore();
   const [isHovered, setIsHovered] = useState(false);
@@ -40,7 +41,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative bg-white rounded-xl overflow-hidden border border-neutral-200/60 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer"
+      className={`group relative bg-white rounded-xl overflow-hidden transition-all duration-300 flex flex-col cursor-pointer ${
+        isSelected
+          ? 'ring-4 ring-neutral-900 border-2 border-amber-500 shadow-2xl scale-[1.02] bg-amber-50/10'
+          : 'border border-neutral-200/60 shadow-xs hover:shadow-xl hover:border-neutral-400'
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => onSelectProduct(product)}
@@ -56,6 +61,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
+          {isSelected && (
+            <span className="text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider text-white bg-amber-600 shadow-md animate-pulse">
+              {language === 'ar' ? 'محدد حالياً' : 'Selected'}
+            </span>
+          )}
           {product.badge && (
             <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider text-white shadow-xs ${
               product.badge === 'Sale' || product.isSale ? 'bg-red-600' :

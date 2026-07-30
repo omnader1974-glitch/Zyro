@@ -39,37 +39,44 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
   return (
     <AnimatePresence>
       {product && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.96, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden my-8"
+            exit={{ opacity: 0, scale: 0.96, y: 15 }}
+            className="relative w-full max-w-3xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden my-auto flex flex-col border border-neutral-100"
           >
-            {/* Modal Top Header Bar with Back Button & Close Button */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-neutral-50/80">
+            {/* Modal Top Sticky Header Bar with Prominent Back Button */}
+            <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3 border-b border-neutral-200/80 bg-white shadow-2xs z-30">
               <button
                 onClick={onClose}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white hover:bg-neutral-900 hover:text-white text-neutral-800 rounded-lg text-xs font-bold transition-all shadow-2xs border border-neutral-200 group cursor-pointer"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-neutral-900 hover:bg-black text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md group cursor-pointer"
               >
-                <ArrowLeft className={`w-4 h-4 transition-transform group-hover:-translate-x-0.5 ${language === 'ar' ? 'rotate-180 group-hover:translate-x-0.5' : ''}`} />
-                <span>{language === 'ar' ? 'العودة' : 'Back'}</span>
+                <ArrowLeft className={`w-4 h-4 text-amber-400 transition-transform group-hover:-translate-x-1 ${language === 'ar' ? 'rotate-180 group-hover:translate-x-1' : ''}`} />
+                <span>{language === 'ar' ? 'العودة للمنتجات' : 'Back to Products'}</span>
               </button>
 
-              <button
-                onClick={onClose}
-                className="p-1.5 text-neutral-400 hover:text-black hover:bg-neutral-200/60 rounded-full transition-colors cursor-pointer"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <span className="hidden sm:inline-block text-xs text-neutral-400 font-medium">
+                  {language === 'ar' ? 'تفاصيل المنتج' : 'Product Details'}
+                </span>
+                <button
+                  onClick={onClose}
+                  className="p-1.5 text-neutral-500 hover:text-black hover:bg-neutral-100 rounded-full transition-colors cursor-pointer"
+                  aria-label="Close product view"
+                  title={language === 'ar' ? 'إغلاق' : 'Close'}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2">
+            {/* Scrollable Content Body */}
+            <div className="overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2">
               
-              {/* Left: Gallery (1:1 Square Layout) */}
-              <div className="p-6 bg-neutral-50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-neutral-200">
-                <div className="w-full aspect-square rounded-xl overflow-hidden bg-white shadow-xs mb-4 flex items-center justify-center p-4 border border-neutral-100">
+              {/* Left: Gallery (Compact 1:1 Square Layout) */}
+              <div className="p-4 sm:p-5 bg-neutral-50 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-neutral-200/80">
+                <div className="w-full max-w-[280px] sm:max-w-[320px] aspect-square rounded-xl overflow-hidden bg-white shadow-2xs mb-3 flex items-center justify-center p-3 border border-neutral-200/60">
                   <img
                     src={activeImage}
                     alt={title}
@@ -79,12 +86,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
 
                 {/* Thumbnails */}
                 {product.images.length > 1 && (
-                  <div className="flex gap-2 overflow-x-auto max-w-full pb-2">
+                  <div className="flex gap-2 overflow-x-auto max-w-full pb-1">
                     {product.images.map((img, idx) => (
                       <button
                         key={idx}
                         onClick={() => setSelectedImage(img)}
-                        className={`w-14 h-14 aspect-square rounded-lg overflow-hidden border-2 p-1 bg-white transition-all ${
+                        className={`w-12 h-12 aspect-square rounded-lg overflow-hidden border-2 p-1 bg-white transition-all ${
                           activeImage === img ? 'border-neutral-900 scale-105 shadow-xs' : 'border-neutral-200 opacity-70 hover:opacity-100'
                         }`}
                       >
@@ -95,52 +102,52 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                 )}
               </div>
 
-              {/* Right: Info & Controls */}
-              <div className="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+              {/* Right: Info & Controls (Compact Vertical Rhythm) */}
+              <div className="p-4 sm:p-6 flex flex-col justify-between space-y-4">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-widest text-amber-700 font-bold">
+                    <span className="text-[11px] uppercase tracking-widest text-amber-700 font-bold">
                       {product.category}
                     </span>
-                    <span className="text-xs text-neutral-400 font-mono">SKU: {product.sku}</span>
+                    <span className="text-[11px] text-neutral-400 font-mono">SKU: {product.sku}</span>
                   </div>
 
-                  <h2 className="text-2xl font-bold font-serif text-neutral-900 mt-2">
+                  <h2 className="text-xl sm:text-2xl font-bold font-serif text-neutral-900 mt-1 leading-snug">
                     {title}
                   </h2>
 
                   {/* Price */}
-                  <div className="flex items-baseline gap-3 mt-3">
+                  <div className="flex items-baseline gap-2.5 mt-2">
                     {hasDiscount ? (
                       <>
-                        <span className="text-2xl font-extrabold text-red-600">
+                        <span className="text-xl sm:text-2xl font-extrabold text-red-600">
                           ${product.discountedPrice}
                         </span>
-                        <span className="text-base text-neutral-400 line-through">
+                        <span className="text-sm text-neutral-400 line-through">
                           ${product.originalPrice}
                         </span>
-                        <span className="text-xs bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full">
                           -{Math.round(((product.originalPrice - product.discountedPrice!) / product.originalPrice) * 100)}%
                         </span>
                       </>
                     ) : (
-                      <span className="text-2xl font-extrabold text-neutral-900">
+                      <span className="text-xl sm:text-2xl font-extrabold text-neutral-900">
                         ${product.originalPrice}
                       </span>
                     )}
                   </div>
 
-                  <p className="text-sm text-neutral-600 mt-4 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-neutral-600 mt-3 leading-relaxed line-clamp-3 hover:line-clamp-none transition-all">
                     {description}
                   </p>
 
                   {/* Color Selector */}
                   {product.colors && product.colors.length > 0 && (
-                    <div className="mt-6">
-                      <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">
+                    <div className="mt-4">
+                      <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
                         {t('product.selectColor')}: <span className="font-normal text-neutral-900">{activeColor}</span>
                       </label>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2">
                         {product.colors.map((c, i) => {
                           const isSelected = activeColor === c.nameEn;
                           return (
@@ -154,13 +161,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                                   setSelectedImage(product.images[c.imageIndex]);
                                 }
                               }}
-                              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+                              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-medium transition-all ${
                                 isSelected
                                   ? 'border-neutral-900 bg-neutral-900 text-white shadow-xs'
                                   : 'border-neutral-200 bg-white text-neutral-700 hover:border-neutral-400'
                               }`}
                             >
-                              <span className="w-3.5 h-3.5 rounded-full border border-white shadow-xs" style={{ backgroundColor: c.hex }} />
+                              <span className="w-3 h-3 rounded-full border border-white shadow-xs" style={{ backgroundColor: c.hex }} />
                               <span>{language === 'ar' ? c.nameAr : c.nameEn}</span>
                             </button>
                           );
@@ -171,18 +178,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
 
                   {/* Size Selector */}
                   {product.sizes && product.sizes.length > 0 && (
-                    <div className="mt-6">
-                      <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">
+                    <div className="mt-4">
+                      <label className="block text-[11px] font-bold text-neutral-700 uppercase tracking-wider mb-1.5">
                         {t('product.selectSize')}
                       </label>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5">
                         {product.sizes.map((s, i) => {
                           const isSelected = activeSize === s;
                           return (
                             <button
                               key={i}
                               onClick={() => setSelectedSize(s)}
-                              className={`min-w-[44px] h-10 px-3 rounded-lg border text-xs font-bold transition-all ${
+                              className={`min-w-[38px] h-8 px-2.5 rounded-lg border text-xs font-bold transition-all ${
                                 isSelected
                                   ? 'border-neutral-900 bg-neutral-900 text-white shadow-xs'
                                   : 'border-neutral-200 bg-white text-neutral-800 hover:border-neutral-400'
@@ -197,21 +204,21 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                   )}
 
                   {/* Quantity */}
-                  <div className="mt-6 flex items-center gap-4">
-                    <span className="text-xs font-bold text-neutral-700 uppercase tracking-wider">
+                  <div className="mt-4 flex items-center gap-3">
+                    <span className="text-[11px] font-bold text-neutral-700 uppercase tracking-wider">
                       Quantity:
                     </span>
                     <div className="flex items-center border border-neutral-300 rounded-lg overflow-hidden bg-white">
                       <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="px-3 py-1.5 text-neutral-600 hover:bg-neutral-100 font-bold"
+                        className="px-2.5 py-1 text-neutral-600 hover:bg-neutral-100 font-bold text-xs"
                       >
                         -
                       </button>
-                      <span className="px-4 py-1.5 text-sm font-semibold">{quantity}</span>
+                      <span className="px-3 py-1 text-xs font-semibold">{quantity}</span>
                       <button
                         onClick={() => setQuantity(quantity + 1)}
-                        className="px-3 py-1.5 text-neutral-600 hover:bg-neutral-100 font-bold"
+                        className="px-2.5 py-1 text-neutral-600 hover:bg-neutral-100 font-bold text-xs"
                       >
                         +
                       </button>
@@ -220,12 +227,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                 </div>
 
                 {/* Action Buttons */}
-                <div className="space-y-3 pt-4 border-t border-neutral-200">
-                  <div className="flex gap-3">
+                <div className="space-y-2.5 pt-3 border-t border-neutral-200/80">
+                  <div className="flex gap-2.5">
                     <button
                       onClick={handleAddToCart}
                       disabled={product.stock <= 0}
-                      className={`flex-1 py-3.5 px-6 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${
+                      className={`flex-1 py-3 px-5 rounded-xl font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-md transition-all ${
                         isAdded 
                           ? 'bg-emerald-600 text-white' 
                           : 'bg-neutral-900 text-white hover:bg-black'
@@ -233,12 +240,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
                     >
                       {isAdded ? (
                         <>
-                          <Check className="w-5 h-5" />
+                          <Check className="w-4 h-4" />
                           <span>{language === 'ar' ? 'تمت الإضافة للحقيبة!' : 'Added to Bag!'}</span>
                         </>
                       ) : (
                         <>
-                          <ShoppingBag className="w-5 h-5" />
+                          <ShoppingBag className="w-4 h-4" />
                           <span>{t('product.addToCart')}</span>
                         </>
                       )}
@@ -246,28 +253,28 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product,
 
                     <button
                       onClick={() => toggleWishlist(product.id)}
-                      className={`p-3.5 rounded-xl border transition-all ${
+                      className={`p-3 rounded-xl border transition-all ${
                         isWishlisted 
                           ? 'border-red-500 bg-red-50 text-red-600' 
                           : 'border-neutral-300 hover:border-neutral-500 text-neutral-700'
                       }`}
                     >
-                      <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-red-600' : ''}`} />
+                      <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-red-600' : ''}`} />
                     </button>
                   </div>
 
                   {/* Value Propositions */}
-                  <div className="grid grid-cols-3 gap-2 pt-2 text-[10px] text-neutral-500 text-center font-medium">
-                    <div className="flex flex-col items-center gap-1 p-2 bg-neutral-50 rounded-lg">
-                      <Truck className="w-4 h-4 text-amber-600" />
-                      <span>Fast Express Delivery</span>
+                  <div className="grid grid-cols-3 gap-1.5 pt-1 text-[9px] text-neutral-500 text-center font-medium">
+                    <div className="flex flex-col items-center gap-0.5 p-1.5 bg-neutral-50 rounded-md">
+                      <Truck className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Fast Delivery</span>
                     </div>
-                    <div className="flex flex-col items-center gap-1 p-2 bg-neutral-50 rounded-lg">
-                      <ShieldCheck className="w-4 h-4 text-amber-600" />
-                      <span>100% Authentic Luxury</span>
+                    <div className="flex flex-col items-center gap-0.5 p-1.5 bg-neutral-50 rounded-md">
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                      <span>100% Authentic</span>
                     </div>
-                    <div className="flex flex-col items-center gap-1 p-2 bg-neutral-50 rounded-lg">
-                      <RotateCcw className="w-4 h-4 text-amber-600" />
+                    <div className="flex flex-col items-center gap-0.5 p-1.5 bg-neutral-50 rounded-md">
+                      <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
                       <span>Easy Returns</span>
                     </div>
                   </div>
